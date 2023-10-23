@@ -159,7 +159,7 @@ def _get_linear_predictor(minimum_phase_factor, cross_spectral_matrix, I):
 
 
 def minimum_phase_decomposition(
-    cross_spectral_matrix, tolerance=1e-8, max_iterations=60
+    cross_spectral_matrix, tolerance=1e-8, max_iterations=200
 ):
     """Find a minimum phase matrix square root of the cross spectral
     density using the Wilson algorithm.
