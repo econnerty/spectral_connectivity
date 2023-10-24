@@ -2,23 +2,31 @@
 pairwise spectral granger prediction."""
 
 import os
+import logging
 from logging import getLogger
 
 import numpy as np
+
+logger = getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
         import cupy as xp
         from cupyx.scipy.fft import fft, ifft
+        logger.debug("Using GPU for phase decomposition")
+
     except ImportError:
         import numpy as xp
         from scipy.fft import fft, ifft
+        logger.debug("Using CPU for phase decomposition")
 else:
     import numpy as xp
     from scipy.fft import fft, ifft
+    logger.debug("Using CPU for phase decomposition")
 
 
-logger = getLogger(__name__)
+
 
 
 def _conjugate_transpose(x):
@@ -159,7 +167,7 @@ def _get_linear_predictor(minimum_phase_factor, cross_spectral_matrix, I):
 
 
 def minimum_phase_decomposition(
-    cross_spectral_matrix, tolerance=1e-8, max_iterations=200
+    cross_spectral_matrix, tolerance=1e-8, max_iterations=60
 ):
     """Find a minimum phase matrix square root of the cross spectral
     density using the Wilson algorithm.

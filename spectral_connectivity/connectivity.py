@@ -4,11 +4,14 @@ import os
 from functools import partial, wraps
 from inspect import signature
 from itertools import combinations
+import logging
 from logging import getLogger
 
 import numpy as np
 from scipy.ndimage import label
 from scipy.stats.mstats import linregress
+
+logging.basicConfig(level=logging.DEBUG)
 
 from spectral_connectivity.minimum_phase_decomposition import (
     minimum_phase_decomposition,
@@ -24,7 +27,7 @@ logger = getLogger(__name__)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
-        logger.info("Using GPU for spectral_connectivity...")
+        logger.debug("Using GPU for spectral_connectivity...")
         import cupy as xp
         from cupyx.scipy.fft import ifft
         from cupyx.scipy.sparse.linalg import svds
@@ -37,7 +40,7 @@ if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
         from scipy.fft import ifft
         from scipy.sparse.linalg import svds
 else:
-    logger.info("Using CPU for spectral_connectivity...")
+    logger.debug("Using CPU for spectral_connectivity...")
     import numpy as xp
     from scipy.fft import ifft
     from scipy.sparse.linalg import svds
