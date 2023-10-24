@@ -14,6 +14,8 @@ if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
         import cupy as xp
         from cupyx.scipy.fft import fft, ifft
+        # Use asynchronous stream ordered memory
+        xp.cuda.set_allocator(xp.cuda.MemoryAsyncPool().malloc)
         logger.debug("Using GPU for phase decomposition")
 
     except ImportError:

@@ -31,6 +31,7 @@ if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
         import cupy as xp
         from cupyx.scipy.fft import ifft
         from cupyx.scipy.sparse.linalg import svds
+        xp.cuda.set_allocator(xp.cuda.MemoryAsyncPool().malloc)
     except ImportError:
         print(
             "Cupy not installed. Cupy is needed to use GPU for "
