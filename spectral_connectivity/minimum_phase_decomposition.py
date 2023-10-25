@@ -8,14 +8,16 @@ from logging import getLogger
 import numpy as np
 
 logger = getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+
+#logging.basicConfig(level=logging.DEBUG)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
         import cupy as xp
+        # Use managed memory
+        xp.cuda.set_allocator(xp.cuda.MemoryPool(xp.cuda.malloc_managed).malloc)
         from cupyx.scipy.fft import fft, ifft
-        # Use asynchronous stream ordered memory
-        xp.cuda.set_allocator(xp.cuda.MemoryAsyncPool().malloc)
+
         logger.debug("Using GPU for phase decomposition")
 
     except ImportError:
@@ -27,7 +29,7 @@ else:
     from scipy.fft import fft, ifft
     logger.debug("Using CPU for phase decomposition")
 
-
+#logging.basicConfig(level=logging.disable)
 
 
 

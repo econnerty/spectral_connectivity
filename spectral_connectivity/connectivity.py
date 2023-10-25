@@ -11,7 +11,7 @@ import numpy as np
 from scipy.ndimage import label
 from scipy.stats.mstats import linregress
 
-logging.basicConfig(level=logging.DEBUG)
+#ogging.basicConfig(level=logging.DEBUG)
 
 from spectral_connectivity.minimum_phase_decomposition import (
     minimum_phase_decomposition,
@@ -29,9 +29,10 @@ if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
         logger.debug("Using GPU for spectral_connectivity...")
         import cupy as xp
+        # Use managed memory
+        xp.cuda.set_allocator(xp.cuda.MemoryPool(xp.cuda.malloc_managed).malloc)
         from cupyx.scipy.fft import ifft
         from cupyx.scipy.sparse.linalg import svds
-        xp.cuda.set_allocator(xp.cuda.MemoryAsyncPool().malloc)
     except ImportError:
         print(
             "Cupy not installed. Cupy is needed to use GPU for "
@@ -45,6 +46,7 @@ else:
     import numpy as xp
     from scipy.fft import ifft
     from scipy.sparse.linalg import svds
+#logging.basicConfig(level=logging.warning)
 
 EXPECTATION = {
     "time": partial(xp.mean, axis=0),
@@ -700,6 +702,8 @@ class Connectivity:
 
     @_asnumpy
     def pairwise_spectral_granger_prediction(self):
+        #free cupy memory
+        xp.cuda.runtime.deviceSynchronize()
         """The amount of power at a node in a frequency explained by (is
         predictive of) the power at other nodes.
 
