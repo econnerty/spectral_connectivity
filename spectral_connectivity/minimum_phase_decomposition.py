@@ -9,7 +9,7 @@ import numpy as np
 
 logger = getLogger(__name__)
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.CRITICAL)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
