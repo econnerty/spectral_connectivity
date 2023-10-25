@@ -24,7 +24,7 @@ from spectral_connectivity.statistics import (
 )
 
 logger = getLogger(__name__)
-logging.basicConfig(level=logging.debug)
+logging.basicConfig(level=logging.DEBUG)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
