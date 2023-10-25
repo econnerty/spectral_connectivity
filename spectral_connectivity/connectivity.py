@@ -24,6 +24,7 @@ from spectral_connectivity.statistics import (
 )
 
 logger = getLogger(__name__)
+logging.basicConfig(level=logging.debug)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
@@ -46,7 +47,7 @@ else:
     import numpy as xp
     from scipy.fft import ifft
     from scipy.sparse.linalg import svds
-#logging.basicConfig(level=logging.warning)
+
 
 EXPECTATION = {
     "time": partial(xp.mean, axis=0),
