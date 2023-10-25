@@ -24,15 +24,15 @@ from spectral_connectivity.statistics import (
 )
 
 logger = getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.CRITICAL)
 
 if os.environ.get("SPECTRAL_CONNECTIVITY_ENABLE_GPU") == "true":
     try:
         logger.debug("Using GPU for spectral_connectivity...")
         import cupy as xp
         # Use managed memory
-        #xp.cuda.set_allocator(xp.cuda.MemoryPool(xp.cuda.malloc_managed).malloc)
-        xp.cuda.set_allocator(xp.cuda.MemoryAsyncPool().malloc)
+        xp.cuda.set_allocator(xp.cuda.MemoryPool(xp.cuda.malloc_managed).malloc)
+        #xp.cuda.set_allocator(xp.cuda.MemoryAsyncPool().malloc)
         from cupyx.scipy.fft import ifft
         from cupyx.scipy.sparse.linalg import svds
     except ImportError:
